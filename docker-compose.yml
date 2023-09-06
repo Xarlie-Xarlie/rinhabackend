@@ -5,7 +5,7 @@ services:
     image: rinhabackend
     hostname: api1
     depends_on:
-      - db
+      - postgres
     expose:
       - "4000"
     deploy:
@@ -18,7 +18,7 @@ services:
     image: rinhabackend
     hostname: api2
     depends_on:
-      - db
+      - postgres
     expose:
       - "4000"
     deploy:
@@ -46,7 +46,7 @@ services:
     container_name: "postgres"
     image: postgres
     ports:
-      - "5432"
+      - 5432:5432
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
