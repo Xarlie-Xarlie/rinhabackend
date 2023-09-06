@@ -3,11 +3,11 @@ version: '3.5'
 services:
   api1:
     image: rinhabackend
-    hostname: rinhabackend
+    hostname: api1
     depends_on:
       - db
     expose:
-      - "80"
+      - "4000"
     deploy:
       resources:
         limits:
@@ -16,11 +16,11 @@ services:
 
   api2:
     image: rinhabackend
-    hostname: rinhabackend
+    hostname: api2
     depends_on:
       - db
     expose:
-      - "80"
+      - "4000"
     deploy:
       resources:
         limits:
@@ -42,10 +42,22 @@ services:
           cpus: '0.25'
           memory: '0.5GB'
 
-  db:
-   image: postgres
-   deploy:
+  postgres:
+    container_name: "postgres"
+    image: postgres
+    ports:
+      - "5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_HOST_AUTH_METHOD: trust
+      PGDATA: /var/lib/postgresql/data/pgdata
+    deploy:
       resources:
         limits:
           cpus: '0.75'
           memory: '1.5GB'
+
+networks:
+  default:
+    name: rinhabackend
