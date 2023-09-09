@@ -10,6 +10,7 @@ defmodule RinhabackendWeb.RinhabackendController do
       {:ok, pessoa} ->
         conn
         |> put_status(:created)
+        |> put_resp_header("Location", "/pessoas/#{pessoa.id}")
         |> render(:create, pessoa: pessoa)
 
       {:error, changeset} ->

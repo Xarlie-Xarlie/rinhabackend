@@ -8,10 +8,10 @@ defmodule RinhabackendWeb.Router do
   scope "/", RinhabackendWeb do
     pipe_through :api
 
-    post "pessoas", RinhabackendController, :create
-    get "pessoas/:id", RinhabackendController, :show
-    get "pessoas", RinhabackendController, :query
-    get "contagem-pessoas", RinhabackendController, :count
+    post "/pessoas", RinhabackendController, :create
+    get "/pessoas/:id", RinhabackendController, :show
+    get "/pessoas", RinhabackendController, :query
+    get "/contagem-pessoas", RinhabackendController, :count
   end
 
   # Enable LiveDashboard in development
