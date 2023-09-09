@@ -3,6 +3,9 @@ defmodule Rinhabackend.Application do
   # for more information on OTP Applications
   @moduledoc false
 
+  @write_cache Application.compile_env!(:rinhabackend, :write_cache)
+  @read_cache Application.compile_env!(:rinhabackend, :read_cache)
+
   use Application
 
   @impl true
@@ -15,14 +18,26 @@ defmodule Rinhabackend.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Rinhabackend.PubSub},
       # Start the Endpoint (http/https)
-      RinhabackendWeb.Endpoint
+      RinhabackendWeb.Endpoint,
       # Start a worker by calling: Rinhabackend.Worker.start_link(arg)
-      # {Rinhabackend.Worker, arg}
+      %{
+        id: @write_cache,
+        start: {Eternal, :start_link, [@write_cache, [:compressed], [quiet: true]]}
+      },
+      %{
+        id: @read_cache,
+        start: {Eternal, :start_link, [@read_cache, [:compressed], [quiet: true]]}
+      },
+      {Rinhabackend.ProducerDatabaseEvents, @write_cache},
+      Supervisor.child_spec({Rinhabackend.ConsumerDatabaseEvents, @write_cache}, id: :c1),
+      Supervisor.child_spec({Rinhabackend.ConsumerDatabaseEvents, @write_cache}, id: :c2),
+      Supervisor.child_spec({Rinhabackend.ConsumerDatabaseEvents, @write_cache}, id: :c3),
+      Supervisor.child_spec({Rinhabackend.ConsumerDatabaseEvents, @write_cache}, id: :c4)
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: Rinhabackend.Supervisor]
+    opts = [strategy: :rest_for_one, name: Rinhabackend.Supervisor]
     Supervisor.start_link(children, opts)
   end
 

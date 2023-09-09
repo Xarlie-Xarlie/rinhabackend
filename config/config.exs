@@ -20,6 +20,9 @@ config :rinhabackend, RinhabackendWeb.Endpoint,
   pubsub_server: Rinhabackend.PubSub,
   live_view: [signing_salt: "vjJtLRPH"]
 
+config :rinhabackend, read_cache: :read_cache_ets
+config :rinhabackend, write_cache: :write_cache_ets
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
