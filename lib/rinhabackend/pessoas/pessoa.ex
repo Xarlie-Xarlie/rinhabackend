@@ -38,6 +38,7 @@ defmodule Rinhabackend.Pessoas.Pessoa do
     |> validate_length(:apelido, max: 32)
     |> validate_length(:nome, max: 100)
     |> validate_change(:stack, &validate_stack/2)
+    |> change(%{id: Ecto.UUID.generate()})
   end
 
   @spec validate_stack(atom(), [binary()]) :: keyword()
