@@ -20,7 +20,7 @@ defmodule Rinhabackend.Pessoas.Get do
       [{:pessoa, id, apelido, nome, nascimento, stack}] ->
         %Pessoa{id: id, apelido: apelido, nome: nome, nascimento: nascimento, stack: stack}
 
-      [] ->
+      _ ->
         nil
     end
   end

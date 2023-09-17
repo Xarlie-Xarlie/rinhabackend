@@ -27,7 +27,7 @@ defmodule Rinhabackend.ProduceSaveEvents do
 
     :mnesia.transaction(fn ->
       Tuple.insert_at(event, 0, :pessoa)
-      |> :mnesia.dirty_write()
+      |> :mnesia.write()
     end)
 
     dispatch_events(queue, pending_demand, [])
