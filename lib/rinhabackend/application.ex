@@ -3,9 +3,6 @@ defmodule Rinhabackend.Application do
   # for more information on OTP Applications
   @moduledoc false
 
-  @write_cache Application.compile_env!(:rinhabackend, :write_cache)
-  @read_cache Application.compile_env!(:rinhabackend, :read_cache)
-
   use Application
 
   @impl true
@@ -20,20 +17,18 @@ defmodule Rinhabackend.Application do
       # Start the Endpoint (http/https)
       RinhabackendWeb.Endpoint,
       # Start a worker by calling: Rinhabackend.Worker.start_link(arg)
-      %{
-        id: @write_cache,
-        start: {Eternal, :start_link, [@write_cache, [:compressed], [quiet: true]]}
-      },
-      %{
-        id: @read_cache,
-        start: {Eternal, :start_link, [@read_cache, [:compressed], [quiet: true]]}
-      },
-      {Rinhabackend.ProducerDatabaseEvents, @write_cache},
-      Supervisor.child_spec({Rinhabackend.ConsumerDatabaseEvents, @write_cache}, id: :c1),
-      Supervisor.child_spec({Rinhabackend.ConsumerDatabaseEvents, @write_cache}, id: :c2),
-      Supervisor.child_spec({Rinhabackend.ConsumerDatabaseEvents, @write_cache}, id: :c3),
-      Supervisor.child_spec({Rinhabackend.ConsumerDatabaseEvents, @write_cache}, id: :c4)
+      {Rinhabackend.ProduceSaveEvents, 0},
+      %{id: :c1, start: {Rinhabackend.ConsumerSaveEvents, :start_link, [:ok]}},
+      %{id: :c2, start: {Rinhabackend.ConsumerSaveEvents, :start_link, [:ok]}},
+      %{id: :c3, start: {Rinhabackend.ConsumerSaveEvents, :start_link, [:ok]}},
+      %{id: :c4, start: {Rinhabackend.ConsumerSaveEvents, :start_link, [:ok]}}
     ]
+
+    children =
+      case Rinhabackend.Stores.Cluster.children_spec() do
+        nil -> children
+        children_spec -> children ++ children_spec
+      end
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options

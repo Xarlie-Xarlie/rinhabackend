@@ -5,7 +5,7 @@ defmodule Rinhabackend.Pessoas.Create do
 
   alias Ecto.Changeset
   alias Rinhabackend.Pessoas.Pessoa
-  alias Rinhabackend.ProducerDatabaseEvents
+  alias Rinhabackend.ProduceSaveEvents
 
   @doc "Create a new %Pessoa{} in database"
   @spec call(map()) :: {:ok, Pessoa.t()} | {:error, Changeset.t()}
@@ -23,7 +23,7 @@ defmodule Rinhabackend.Pessoas.Create do
     nome = Map.get(changes, :nome, "")
     stack = Map.get(changes, :stack, [])
 
-    ProducerDatabaseEvents.save_to_ets({id, apelido, nome, nascimento, stack})
+    ProduceSaveEvents.sync_notify({id, apelido, nome, nascimento, stack})
     {:ok, %Pessoa{id: id, apelido: apelido, nome: nome, nascimento: nascimento, stack: stack}}
   end
 end

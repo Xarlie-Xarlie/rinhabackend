@@ -11,6 +11,7 @@ defmodule Rinhabackend.Pessoas.Query do
 
   @doc "Query a %Pessoa{} in database"
   @spec call(binary()) :: [Pessoa.t()]
+  def call(_), do: []
   def call(""), do: []
 
   def call(query_string) do

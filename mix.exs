@@ -49,7 +49,8 @@ defmodule Rinhabackend.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       {:gen_stage, "~> 1.2.1"},
-      {:eternal, "~> 1.2"}
+      {:mnesiac, "~> 0.3"},
+      {:libcluster, "~> 3.3.3"}
     ]
   end
 
