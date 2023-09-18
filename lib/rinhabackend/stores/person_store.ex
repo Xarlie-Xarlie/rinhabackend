@@ -11,7 +11,8 @@ defmodule Rinhabackend.Stores.PersonStore do
     nome: nil,
     apelido: nil,
     nascimento: nil,
-    stack: []
+    stack: [],
+    indexed: nil
   )
 
   @type pessoa ::
@@ -21,7 +22,8 @@ defmodule Rinhabackend.Stores.PersonStore do
             nome: String.t(),
             apelido: String.t(),
             nascimento: NaiveDateTime.t(),
-            stack: [String.t()]
+            stack: [String.t()],
+            indexed: String.t()
           )
   @impl true
   def store_options do

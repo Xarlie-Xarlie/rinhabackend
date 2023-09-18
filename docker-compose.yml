@@ -22,6 +22,7 @@ services:
     hostname: api2
     depends_on:
       - postgres
+      - api1
     environment:
       SECRET_KEY_BASE: uodN/bT/69cDyfLm+qwKUWKg88yyMrffUEmhedFblqDOOBxsbsJfPKFmqZKM+VOg
       DATABASE_URL: postgres://postgres:postgres@postgres:5432/rinhabackend_prod

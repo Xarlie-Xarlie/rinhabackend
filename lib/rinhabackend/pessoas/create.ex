@@ -23,7 +23,14 @@ defmodule Rinhabackend.Pessoas.Create do
     nome = Map.get(changes, :nome, "")
     stack = Map.get(changes, :stack, [])
 
-    ProduceSaveEvents.sync_notify({id, apelido, nome, nascimento, stack})
+    indexed_fields =
+      stack
+      |> Enum.join(";")
+      |> String.downcase()
+      |> Kernel.<>(";" <> String.downcase(nome) <> ";" <> String.downcase(apelido))
+      |> String.trim(";")
+
+    ProduceSaveEvents.sync_notify({id, apelido, nome, nascimento, stack, indexed_fields})
     {:ok, %Pessoa{id: id, apelido: apelido, nome: nome, nascimento: nascimento, stack: stack}}
   end
 end

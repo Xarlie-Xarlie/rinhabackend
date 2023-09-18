@@ -13,7 +13,7 @@ defmodule Rinhabackend.ConsumerSaveEvents do
   end
 
   def handle_events(events, _from, state) do
-    for {id, nome, apelido, nascimento, stack} <- events do
+    for {id, nome, apelido, nascimento, stack, _} <- events do
       now =
         NaiveDateTime.utc_now()
         |> NaiveDateTime.truncate(:second)
