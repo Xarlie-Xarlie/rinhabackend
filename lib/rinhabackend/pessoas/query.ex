@@ -4,6 +4,7 @@ defmodule Rinhabackend.Pessoas.Query do
   """
 
   alias Rinhabackend.Pessoas.Pessoa
+  alias Rinhabackend.Events.QueryCall
 
   @doc "Query a %Pessoa{} in database"
   @spec call(binary()) :: [Pessoa.t()]
@@ -12,27 +13,14 @@ defmodule Rinhabackend.Pessoas.Query do
   def call(query_string) do
     query_string = String.downcase(query_string)
 
-    :mnesia.transaction(fn ->
-      :mnesia.foldr(
-        fn {id, name, nickname, birthday, stack, indexed_fields}, acc ->
-          if String.contains?(indexed_fields, query_string) do
-            [
-              %Pessoa{id: id, nome: name, apelido: nickname, nascimento: birthday, stack: stack}
-              | acc
-            ]
-          else
-            acc
-          end
-        end,
-        [],
-        :pessoa
-      )
-    end)
-    |> case do
-      {:atomic, result} ->
-        result
+    pid = self()
+    QueryCall.query(query_string, pid)
 
-      _ ->
+    receive do
+      result -> result
+    after
+      45000 ->
+        IO.puts("demorou")
         []
     end
   end

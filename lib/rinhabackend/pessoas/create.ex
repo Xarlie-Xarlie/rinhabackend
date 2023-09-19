@@ -5,7 +5,7 @@ defmodule Rinhabackend.Pessoas.Create do
 
   alias Ecto.Changeset
   alias Rinhabackend.Pessoas.Pessoa
-  alias Rinhabackend.ProduceSaveEvents
+  alias Rinhabackend.Events.ProducerSave
 
   @doc "Create a new %Pessoa{} in database"
   @spec call(map()) :: {:ok, Pessoa.t()} | {:error, Changeset.t()}
@@ -25,12 +25,11 @@ defmodule Rinhabackend.Pessoas.Create do
 
     indexed_fields =
       stack
-      |> Enum.join(";")
+      |> Enum.join("")
       |> String.downcase()
-      |> Kernel.<>(";" <> String.downcase(nome) <> ";" <> String.downcase(apelido))
-      |> String.trim(";")
+      |> Kernel.<>(String.downcase(nome) <> String.downcase(apelido))
 
-    ProduceSaveEvents.sync_notify({id, apelido, nome, nascimento, stack, indexed_fields})
+    ProducerSave.sync_notify({id, apelido, nome, nascimento, stack, indexed_fields})
     {:ok, %Pessoa{id: id, apelido: apelido, nome: nome, nascimento: nascimento, stack: stack}}
   end
 end

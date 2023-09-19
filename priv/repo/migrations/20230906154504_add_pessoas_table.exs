@@ -8,11 +8,16 @@ defmodule Rinhabackend.Repo.Migrations.AddPessoasTable do
       add(:nome, :string, null: false)
       add(:nascimento, :date, null: false)
       add(:stack, {:array, :string}, default: [])
+      add(:text, :text)
       timestamps()
     end
+
+    execute("CREATE EXTENSION IF NOT EXISTS btree_gist")
+    create(index(:pessoas, [:text], using: :gist))
+    create(index(:pessoas, [:id]))
   end
 
   def down do
-    drop table(:pessoas)
+    drop(table(:pessoas))
   end
 end

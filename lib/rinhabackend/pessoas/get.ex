@@ -15,9 +15,11 @@ defmodule Rinhabackend.Pessoas.Get do
   end
 
   defp get_person(valid_person_id) do
-    :mnesia.dirty_read({:pessoa, valid_person_id})
+    :mnesia.transaction(fn ->
+      :mnesia.read({:pessoa, valid_person_id})
+    end)
     |> case do
-      [{:pessoa, id, apelido, nome, nascimento, stack, _}] ->
+      {:atomic, [{:pessoa, id, apelido, nome, nascimento, stack, _}]} ->
         %Pessoa{id: id, apelido: apelido, nome: nome, nascimento: nascimento, stack: stack}
 
       _ ->

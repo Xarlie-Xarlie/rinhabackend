@@ -1,4 +1,4 @@
-defmodule Rinhabackend.ProduceSaveEvents do
+defmodule Rinhabackend.Events.ProducerSave do
   @moduledoc """
   Broadcasts events to consumers.
 
@@ -19,7 +19,7 @@ defmodule Rinhabackend.ProduceSaveEvents do
   ## Callbacks
 
   def init(:ok) do
-    {:producer, {:queue.new(), 0}, dispatcher: GenStage.DemandDispatcher}
+    {:producer, {:queue.new(), 0}, dispatcher: GenStage.BroadcastDispatcher}
   end
 
   def handle_cast({:notify, event}, {queue, pending_demand}) do

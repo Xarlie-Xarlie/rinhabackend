@@ -14,8 +14,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.5'
-          memory: '0.75GB'
+          cpus: '0.25'
+          memory: '0.5GB'
 
   api2:
     image: charliecharlie/rinhabackend
@@ -31,8 +31,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.5'
-          memory: '0.75GB'
+          cpus: '0.25'
+          memory: '0.5GB'
 
   nginx:
     image: nginx:latest
@@ -46,7 +46,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.25'
+          cpus: '0.05'
           memory: '0.25GB'
 
   postgres:
@@ -63,8 +63,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.25'
-          memory: '1.25GB'
+          cpus: '0.95'
+          memory: '1.75GB'
 
 networks:
   default:

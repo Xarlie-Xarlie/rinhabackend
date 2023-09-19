@@ -28,12 +28,13 @@ defmodule Rinhabackend.Pessoas.Pessoa do
     field(:nome, :string)
     field(:stack, {:array, :string}, default: [])
     field(:nascimento, :date)
+    field(:text, :string)
     timestamps()
   end
 
   def changeset(params) do
     %__MODULE__{}
-    |> cast(params, [:apelido, :nome, :stack, :nascimento])
+    |> cast(params, [:apelido, :nome, :stack, :nascimento, :text])
     |> validate_required([:apelido, :nome, :stack, :nascimento])
     |> validate_length(:apelido, max: 32)
     |> validate_length(:nome, max: 100)
