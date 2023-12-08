@@ -23,21 +23,6 @@ config :rinhabackend, RinhabackendWeb.Endpoint,
 config :rinhabackend, read_cache: :read_cache_ets
 config :rinhabackend, write_cache: :write_cache_ets
 
-config :mnesiac,
-  dir: '.mnesia/#{node()}',
-  stores: [Rinhabackend.Stores.PersonStore],
-  schema_type: :disc_copies
-
-config :libcluster,
-  topologies: [
-    rinhabackend: [
-      strategy: Cluster.Strategy.Epmd,
-      config: [
-        hosts: [:rinhabackend@api1, :rinhabackend@api2]
-      ]
-    ]
-  ]
-
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

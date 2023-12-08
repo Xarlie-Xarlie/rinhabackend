@@ -13,7 +13,12 @@ defmodule Rinhabackend.Repo.Migrations.AddPessoasTable do
     end
 
     execute("CREATE EXTENSION IF NOT EXISTS btree_gist")
-    create(index(:pessoas, [:text], using: :gist))
+    execute("CREATE EXTENSION IF NOT EXISTS pg_trgm")
+
+    execute(
+      "CREATE INDEX IF NOT EXISTS pessoas_text_idx ON pessoas USING GIST(text gist_trgm_ops);"
+    )
+
     create(index(:pessoas, [:id]))
   end
 

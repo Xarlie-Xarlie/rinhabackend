@@ -4,6 +4,7 @@ defmodule Rinhabackend.Pessoas.Get do
   """
 
   alias Rinhabackend.Pessoas.Pessoa
+  alias Rinhabackend.Repo
 
   @doc "Get a %Pessoa{} in database"
   @spec call(map()) :: Pessoa.t() | nil
@@ -15,15 +16,6 @@ defmodule Rinhabackend.Pessoas.Get do
   end
 
   defp get_person(valid_person_id) do
-    :mnesia.transaction(fn ->
-      :mnesia.read({:pessoa, valid_person_id})
-    end)
-    |> case do
-      {:atomic, [{:pessoa, id, apelido, nome, nascimento, stack, _}]} ->
-        %Pessoa{id: id, apelido: apelido, nome: nome, nascimento: nascimento, stack: stack}
-
-      _ ->
-        nil
-    end
+    Repo.get_by(Pessoa, id: valid_person_id)
   end
 end

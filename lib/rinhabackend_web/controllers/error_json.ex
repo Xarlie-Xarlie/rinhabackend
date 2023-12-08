@@ -10,24 +10,15 @@ defmodule RinhabackendWeb.ErrorJSON do
   # the template name. For example, "404.json" becomes
   # "Not Found".
 
-  alias Ecto.Changeset
-
   def render(template, _assigns) do
     %{errors: %{detail: Phoenix.Controller.status_message_from_template(template)}}
   end
 
-  def bad_request(%{message: message}), do: %{message: message}
+  def bad_request(%{message: _message}), do: nil
 
   def not_found(_), do: nil
 
-  def not_valid_entity(%{changeset: changeset}) do
-    %{errors: Changeset.traverse_errors(changeset, &translate_errors/1)}
-  end
-
-  @spec translate_errors(tuple()) :: binary()
-  defp translate_errors({msg, opts}) do
-    Regex.replace(~r/%{(\w+)}/, msg, fn _, key ->
-      opts |> Keyword.get(String.to_existing_atom(key), key) |> to_string()
-    end)
+  def not_valid_entity(%{changeset: _changeset}) do
+    nil
   end
 end
